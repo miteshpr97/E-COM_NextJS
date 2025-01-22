@@ -1,3 +1,5 @@
+// /app/page.tsx
+
 import Navbar from "@/components/Navbar";
 import Product from "@/pages/product";
 
