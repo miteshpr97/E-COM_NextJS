@@ -1,13 +1,13 @@
+// api/products.ts
+
 import { connect } from "@/dbConfig/dbConfig";
 import ProductModel from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  console.log(connect, "show the connect");
 
-    console.log(connect, "show the connect");
-    
   try {
-    
     await connect();
     const body = await req.json();
     const { name, description, price, image, category, stock } = body;
@@ -36,8 +36,24 @@ export async function POST(req: NextRequest) {
 
     // Return error response
     return NextResponse.json(
-      { message: "Failed to create product",  error: String(error)},
+      { message: "Failed to create product", error: String(error) },
       { status: 500 }
     );
   }
+}
+
+
+
+export async function GET() {
+    try {
+        await connect();  
+        const products = await ProductModel.find();  
+        return NextResponse.json(products, { status: 200 }); 
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return NextResponse.json(
+            { message: "Failed to fetch products", error: String(error) },
+            { status: 500 }
+        );  
+    }
 }

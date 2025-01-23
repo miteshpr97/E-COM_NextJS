@@ -1,3 +1,5 @@
+// models/product.ts   
+
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface Product extends Document {
