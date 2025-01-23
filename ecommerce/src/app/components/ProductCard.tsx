@@ -14,8 +14,6 @@ type ProductCardProps = {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ products }) => {
-    console.log(products, "show the products");
-
     return (
         <div className="max-w-full rounded overflow-hidden shadow-lg bg-gray-200 p-4 flex flex-wrap gap-6">
             {products.map((product) => (
