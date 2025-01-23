@@ -1,3 +1,6 @@
+
+// store/productSlice.ts 
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 interface Product {

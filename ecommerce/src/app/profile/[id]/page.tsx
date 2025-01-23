@@ -3,6 +3,7 @@ interface Params {
 }
 
 export default function Profile({ params }: { params: Params }) {
+    
     if (!params || !params.id) {
         return <p>Invalid Profile Data</p>;
     }
