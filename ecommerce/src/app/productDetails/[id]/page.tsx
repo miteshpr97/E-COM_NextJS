@@ -1,22 +1,15 @@
-
-
-// ProductDetails/[id]/pages.tx 
 'use client';
 
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 
 const ProductDetails: React.FC = () => {
-    const router = useRouter();
-
-    const { id } = router.query;
-
+    const { id } = useParams(); 
 
     console.log(id);
-    
-   
+
     return (
         <div>
-          abc
+            Product ID: {id}
         </div>
     );
 };
