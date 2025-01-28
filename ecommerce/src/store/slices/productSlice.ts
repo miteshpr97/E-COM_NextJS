@@ -1,4 +1,3 @@
-
 // store/productSlice.ts 
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
@@ -7,6 +6,7 @@ interface Product {
   id: string;
   name: string;
   price: number;
+  quantity?: number;
 }
 
 interface ProductState {
@@ -17,6 +17,7 @@ interface ProductState {
 
 const initialState: ProductState = {
   products: [],
+
   loading: false,
   error: null,
 };
@@ -34,7 +35,9 @@ export const fetchProducts = createAsyncThunk('product/fetchProducts', async () 
 const productSlice = createSlice({
   name: 'product',
   initialState,
-  reducers: {},
+  reducers: {
+
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -52,4 +55,9 @@ const productSlice = createSlice({
   },
 });
 
+
+
 export default productSlice.reducer;
+
+
+
