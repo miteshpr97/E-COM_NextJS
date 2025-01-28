@@ -22,7 +22,6 @@ export const POST = async (request: NextRequest) => {
         { status: 400 }
       );
     }
-
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -31,13 +30,10 @@ export const POST = async (request: NextRequest) => {
         { status: 400 }
       );
     }
-
     // Normalize email and check if the user exists
     const normalizedEmail = email.toLowerCase();
     const existingUser = await UserModel.findOne({ email: normalizedEmail });
 
-
-    console.log(existingUser, "showowoowo");
     
     if (!existingUser) {
       return NextResponse.json(
@@ -58,6 +54,7 @@ export const POST = async (request: NextRequest) => {
     // Generate JWT token
     const tokenPayload = {
       id: existingUser._id,
+      userId:existingUser.userId,
       email: existingUser.email,
       userName: existingUser.userName,
       role: existingUser.role,

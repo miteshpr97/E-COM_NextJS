@@ -18,6 +18,10 @@ const Navbar = () => {
 
   const { carts } = useSelector((state: RootState) => state.cart);
 
+
+ 
+  
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -167,7 +171,7 @@ const Navbar = () => {
               onClick={toggleDropdown}
               className="flex items-center bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium"
             >
-              <span>{user?.userName || "Menu"}</span>
+              <span>{user?.userName || "Guest"}</span>
               <svg
                 className="ml-2 w-4 h-4"
                 xmlns="http://www.w3.org/2000/svg"

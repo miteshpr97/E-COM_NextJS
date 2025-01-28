@@ -45,6 +45,8 @@ const ViewCart: React.FC = () => {
       alert("Your cart is empty. Please add some items before checking out.");
       return;
     }
+
+    
   
     // Gather order details
     const orderDetails = {
@@ -90,8 +92,6 @@ const ViewCart: React.FC = () => {
     
   };
   
-
-
   return (
     <>
       <Navbar />
@@ -168,8 +168,6 @@ const ViewCart: React.FC = () => {
                   <p>TOTAL PRICE</p>
                   <p>₹{(totalAmount + 5).toFixed(2)}</p> {/* Default ₹5 shipping */}
                 </div>
-
-
 
                 <div>
                   Shipment Adress: -
