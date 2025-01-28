@@ -7,7 +7,9 @@ const addressSchema: Schema = new Schema({
   state: { type: String, required: true },
   postalCode: { type: String, required: true },
   country: { type: String, required: true },
-});
+},
+{ _id: false } // Disable the _id field for addresses
+);
 
 export interface User extends Document {
   userId: string;
@@ -49,10 +51,11 @@ const userSchema: Schema = new Schema(
       required: true,
       default: "user",
     },
-    adress: {
+    address: {
       type: [addressSchema],
-      required: false,
+      required: true,
     },
+
     createdAt: {
       type: Date,
       default: Date.now,

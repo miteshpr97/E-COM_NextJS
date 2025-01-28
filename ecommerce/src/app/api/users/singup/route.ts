@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     // Generate userId in the format U001
     const lastUser = await UserModel.findOne().sort({ createdAt: -1 });
 
-    console.log(lastUser);
+
 
     let userId = "U001"; // Default userId if no users exist
 
@@ -68,10 +68,13 @@ export async function POST(request: NextRequest) {
       email: normalizedEmail,
       password: hashedPassword,
     });
-
-    console.log(newUser);
+  
 
     const user = await newUser.save();
+
+
+    console.log(user);
+    
 
     // Exclude sensitive fields from response
     const { password: _, ...userDetails } = user._doc;
@@ -88,68 +91,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function PATCH(request: NextRequest) {
-  try {
-    const reqBody = await request.json();
-    const { userId, address } = reqBody;
-
-    // Validate input
-    if (!userId || !address) {
-      return NextResponse.json(
-        { error: "User ID and address are required" },
-        { status: 400 }
-      );
-    }
-
-    const isValidAddress =
-      Array.isArray(address) &&
-      address.every((addr) => {
-        return (
-          typeof addr.street === "string" &&
-          typeof addr.city === "string" &&
-          typeof addr.state === "string" &&
-          typeof addr.postalCode === "string" &&
-          typeof addr.country === "string"
-        );
-      });
-
-
-      if (!isValidAddress) {
-        return NextResponse.json(
-          { error: "Invalid address format" },
-          { status: 400 }
-        );
-      }
-
-
-       // Find user and update address
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      userId,
-      { address },
-      { new: true, runValidators: true }
-    );
-
-
-    if (!updatedUser) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
-    }
-
-
-     // Return success response
-     return NextResponse.json(
-      { message: "Address updated successfully", user: updatedUser },
-      { status: 200 }
-    );
-
-
-  } catch (error: any) {
-    console.error("Address Update Error:", error);
-    return NextResponse.json(
-      { error: "An error occurred while updating the address" },
-      { status: 500 }
-    );
-  }
-}
