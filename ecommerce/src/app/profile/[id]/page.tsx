@@ -1,31 +1,14 @@
-// interface Params {
-//     id: number;
-// }
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-// export default function Profile({ params }: { params: Params }) {
-
-//     if (!params || !params.id) {
-//         return <p>Invalid Profile Data</p>;
-//     }
-
-//     return (
-//         <div>
-//             <h1>Profile</h1>
-//             <p>User ID: {params.id}</p>
-//         </div>
-//     );
-// 
-
-
-'use client'
-
-import { useParams } from 'next/navigation';
+import { useParams } from "next/navigation";
 import { useUser } from "../../../context/UserContext";
 
 
 const Profile: React.FC = () => {
   const { id } = useParams();
   const { user } = useUser();
+
 
 
   return (
@@ -42,19 +25,44 @@ const Profile: React.FC = () => {
           <p>
             <span className="font-semibold text-gray-600">Email:</span> {user.email || "N/A"}
           </p>
-
-          <div>
-            Shipping Address
-
+          <div className="bg-gray-100 p-4 rounded">
+            <div className="flex justify-between">
+            <h2 className="text-lg font-semibold text-gray-700">Shipping Address:</h2>
+           
+            <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                title="Add a new address"
+              >
+                Add Address +
+              </button>
+            </div>
+            {user.address && user.address.length > 0 ? (
+              user.address.map((data: any, index: number) => (
+                <div key={index} className="mt-2">
+                  <p>
+                    <span className="font-semibold text-gray-600">Street:</span> {data.street}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-gray-600">City:</span> {data.city}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-gray-600">State:</span> {data.state}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-gray-600">Postal Code:</span> {data.postalCode}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-600">No address available.</p>
+            )}
           </div>
-
         </div>
       ) : (
         <p>No user data available.</p>
       )}
     </div>
   );
+};
 
-}
-
-export default Profile
+export default Profile;

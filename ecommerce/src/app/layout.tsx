@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "./provider";
+import { Toaster } from "react-hot-toast";
+// import Navbar from "./components/Navbar";
 
 
 const geistSans = Geist({
@@ -31,7 +33,12 @@ export default function RootLayout({
       >
 
         <ReduxProvider>
+        {/* <Navbar />  ✅ Navbar will be shown on all pages */}
+        <main>
           {children}
+          <Toaster position="top-center" reverseOrder={false} />
+        </main>
+        
         </ReduxProvider>
 
 

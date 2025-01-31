@@ -5,8 +5,6 @@ import ProductModel from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  console.log(connect, "show the connect");
-
   try {
     await connect();
     const body = await req.json();
