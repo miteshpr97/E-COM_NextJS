@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
@@ -23,10 +24,13 @@ export default function LoginPage() {
         user,
         { withCredentials: true } // Include cookies if the server sets any
       );
-      console.log("Login success", response.data);
-      toast.success("Login successful!");
-      router.push("/"); // Navigate to the home page
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      
+      if (response.status === 200){
+        toast.success(response.data.message || "Login successful!");
+        router.push("/"); // Navigate to the home page
+      }
+     
+      
     } catch (error: any) {
       console.error("Login failed", error.response?.data?.error || error.message);
       toast.error(error.response?.data?.error || "Login failed. Please try again.");
@@ -46,64 +50,79 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 shadow-lg">
-      <h1 className="text-2xl font-bold">Login</h1>
-      <hr className="my-4 w-1/3" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <h1 className="text-center text-4xl font-extrabold text-gray-900">
+          Welcome Back!
+        </h1>
+        <p className="text-center text-lg text-gray-600">
+          Sign in to your account to continue shopping.
+        </p>
+        <div className="bg-white p-8 rounded-lg shadow-lg space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              placeholder="Email"
+              className={`mt-2 px-4 py-2 border w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 ${
+                user.email && !validateEmail(user.email) ? "border-red-500" : "border-gray-300"
+              }`}
+              aria-label="Email"
+            />
+            {user.email && !validateEmail(user.email) && (
+              <p className="text-red-500 text-sm mt-1">Invalid email format</p>
+            )}
+          </div>
 
-      <label htmlFor="email" className="mt-4">
-        Email
-      </label>
-      <input
-        id="email"
-        type="email"
-        value={user.email}
-        onChange={(e) => setUser({ ...user, email: e.target.value })}
-        placeholder="Email"
-        className={`border p-2 w-1/3 mt-2 ${
-          user.email && !validateEmail(user.email) ? "border-red-500" : "border-gray-300"
-        }`}
-        aria-label="Email"
-      />
-      {user.email && !validateEmail(user.email) && (
-        <p className="text-red-500 text-sm mt-1">Invalid email format</p>
-      )}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              placeholder="Password"
+              className="mt-2 px-4 py-2 border w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              aria-label="Password"
+            />
+          </div>
 
-      <label htmlFor="password" className="mt-4">
-        Password
-      </label>
-      <input
-        id="password"
-        type="password"
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        placeholder="Password"
-        className="border p-2 w-1/3 mt-2 border-gray-300"
-        aria-label="Password"
-      />
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onSignin}
+              disabled={buttonDisabled || loading}
+              className={`w-full py-2 px-4 rounded-md text-white text-lg font-semibold transition-colors duration-300 ${
+                buttonDisabled || loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+              aria-busy={loading}
+            >
+              {loading ? (
+                <span className="loader inline-block w-5 h-5 border-2 border-t-2 border-white rounded-full animate-spin"></span>
+              ) : (
+                "Login"
+              )}
+            </button>
+          </div>
 
-      <button
-        onClick={onSignin}
-        disabled={buttonDisabled || loading}
-        className={`p-2 mt-4 w-1/3 rounded ${
-          buttonDisabled || loading
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-500 hover:bg-blue-600"
-        } text-white`}
-        aria-busy={loading}
-      >
-        {loading ? (
-          <span className="loader inline-block w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></span>
-        ) : (
-          "Login"
-        )}
-      </button>
-
-      <p className="mt-4">
-        Don’t have an account?{" "}
-        <Link href="/signup" className="text-blue-500 underline">
-          Signup here
-        </Link>
-      </p>
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Don’t have an account?{" "}
+              <Link href="/signup" className="text-blue-600 font-semibold hover:underline">
+                Signup here
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

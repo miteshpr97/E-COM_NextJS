@@ -18,6 +18,10 @@ const ViewCart: React.FC = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
   const totalAmount = carts.reduce((total, item) => total + item.price * item.qnty, 0);
 
+
+
+  const isOutOfStock = carts.some(cart => cart.stock === 0);
+  
   const handleRemove = (_id: string) => {
     dispatch(removeFromCart(_id));
   };
@@ -33,6 +37,8 @@ const ViewCart: React.FC = () => {
       }
     }
   };
+
+
 
   const orderPlace = async () => {
     if (carts.length === 0) {
@@ -68,27 +74,22 @@ const ViewCart: React.FC = () => {
   };
 
 
-  // fafafa
-  // dfa333
-
-
-
-
   return (
     <>
       <Navbar />
       <div className="bg-gray-100 min-h-screen py-8">
-        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Shopping Cart Section */}
             <div className="lg:col-span-2">
               <h2 className="text-3xl font-bold mb-6">Shopping Cart</h2>
               {carts.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-4" >
                   {carts.map((cart) => (
+
                     <div
                       key={cart._id}
-                      className="flex items-center justify-between bg-gray-50 p-4 rounded shadow-sm"
+                      className="flex items-center justify-between p-4 rounded shadow-sm"
                     >
                       <div className="flex items-center gap-4">
                         <img
@@ -96,9 +97,9 @@ const ViewCart: React.FC = () => {
                           alt={cart.name}
                           className="w-20 h-20 object-cover rounded"
                         />
-                        <div>
+                        <div className="w-[400px] p-3">
                           <h3 className="font-semibold text-lg">{cart.name}</h3>
-                          <p className="text-sm text-gray-500">{cart.description}</p>
+                          <p className="text-sm text-gray-500 line-clamp-2">{cart.description}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
@@ -117,17 +118,31 @@ const ViewCart: React.FC = () => {
                         </button>
                       </div>
                       <p className="font-bold text-lg">₹{cart.price * cart.qnty}</p>
+
+                      {
+                        cart?.stock === 0 ? (
+                          <span className="text-red-600 ml-4"> Out of Stock</span>
+                        ) : (
+                          ""
+                        )
+                      }
+
                       <button
                         className="text-red-600 hover:underline"
                         onClick={() => handleRemove(cart._id)}
                       >
                         ✕ Remove
                       </button>
+
+
+
+
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 mt-6">Your cart is empty.</p>
+                <p className="text-gray-500 mt-6 mx-auto">Your cart is empty!<br></br>
+                  Explore our wide selection and find something you like.</p>
               )}
               <Link href="/">
                 <span className="text-blue-600 hover:underline mt-6 block">
@@ -181,12 +196,25 @@ const ViewCart: React.FC = () => {
                   <p>Total:</p>
                   <p>₹{(totalAmount + 5).toFixed(2)}</p> {/* Default ₹5 shipping */}
                 </div>
+
+                
+
                 <button
-                  className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800"
-                  onClick={orderPlace}
+                  className={`w-full py-3 rounded-lg font-semibold ${isOutOfStock ? "bg-gray-400 cursor-not-allowed" : "bg-black text-white hover:bg-gray-800"
+                    }`}
+                  onClick={() => {
+                    if (isOutOfStock) {
+                      alert("Please remove out-of-stock items before proceeding to checkout.");
+                    } else {
+                      orderPlace();
+                    }
+                  }}
+                  disabled={isOutOfStock}
                 >
                   Checkout
                 </button>
+
+
               </div>
             </div>
           </div>

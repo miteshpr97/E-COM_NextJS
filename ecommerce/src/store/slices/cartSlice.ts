@@ -11,6 +11,7 @@ interface Product {
   description: string;
   image: string;
   qnty: number; // Optional as it's added dynamically
+  stock: number;
 }
 
 interface CartState {

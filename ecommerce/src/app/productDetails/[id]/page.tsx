@@ -34,16 +34,16 @@ const ProductDetails: React.FC = () => {
 
     fetchProductData();
   }, [id]);
- 
-  
-      const handleAddToCart = (e: any) => {
-          dispatch(addToCart(e))
-        toast.success("Added To Cart");
 
-          router.push('/viewcart')
-  
-      };
-  
+
+  const handleAddToCart = (e: any) => {
+    dispatch(addToCart(e))
+    toast.success("Added To Cart");
+
+    router.push('/viewcart')
+
+  };
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -58,7 +58,7 @@ const ProductDetails: React.FC = () => {
         <div className="bg-white w-[40%] min-h-screen fixed left-0 p-6 h-full flex flex-col items-center border-r border-gray-300 ">
           {/* Product Image Box */}
           <div className="w-[90%] h-[70%] border border-gray-400 flex items-center justify-center shadow-sm bg-gray-50">
-            <img 
+            <img
               src={product?.image}
               alt='Product Image'
               className="w-full h-full object-cover"  // Fixed image size and aspect ratio handling
@@ -67,15 +67,27 @@ const ProductDetails: React.FC = () => {
 
           {/* Action Buttons */}
           <div className="mt-6 w-full flex flex-col items-center gap-3">
-            <button className="w-[80%] bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-            onClick={() => handleAddToCart(product)}
-            >
-              ADD TO CART
-            </button>
-            <button className="w-[80%] bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300">
-              BUY NOW
-            </button>
+            {product?.stock > 0 ? (
+              <>
+                <button
+                  className="w-[80%] bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  ADD TO CART
+                </button>
+
+                <button className="w-[80%] bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300">
+                  BUY NOW
+                </button>
+              </>
+            ) : (
+              <button className=" w-[80%] py-2 rounded-lg text-sm bg-red-500 text-white hover:bg-gray-500 transition duration-300">
+                Out of Stock
+              </button>
+            )}
           </div>
+
+
         </div>
 
         {/* Right Section (60%) */}
@@ -83,11 +95,11 @@ const ProductDetails: React.FC = () => {
           <h1 className="text-black text-3xl font-bold mb-4">{product?.name}</h1>
           <p className="text-lg text-gray-700 mb-2">Product ID: <span className="font-semibold">{id}</span></p>
           <p className="text-gray-600 leading-relaxed">{product?.description}</p>
-          
+
           <div className="mt-4">
             <span className="text-xl font-semibold text-gray-800">Price: ₹{product?.price}</span>
           </div>
-          
+
           <div className="mt-2">
             <span className="text-lg text-gray-600">In Stock: {product?.stock}</span>
           </div>
@@ -148,7 +160,7 @@ export default ProductDetails;
 //         <div className="bg-white w-[40%] min-h-screen fixed left-0 p-6 h-full flex flex-col items-center border-r border-gray-300 shadow-lg rounded-lg">
 //           {/* Product Image Box */}
 //           <div className="w-full h-[70%] border border-gray-300 rounded-lg shadow-md bg-gray-50 flex items-center justify-center">
-//             <img 
+//             <img
 //               src={product?.image}
 //               alt="Product Image"
 //               className="w-full h-full object-cover rounded-lg"

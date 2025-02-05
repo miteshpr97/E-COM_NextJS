@@ -5,6 +5,8 @@ import { useParams } from "next/navigation";
 import { useUser } from "../../../context/UserContext";
 
 
+
+
 const Profile: React.FC = () => {
   const { id } = useParams();
   const { user } = useUser();
