@@ -73,10 +73,6 @@
 
 
 
-
-
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { connect } from "@/dbConfig/dbConfig";
 import OrderModel from "@/models/Order";
@@ -92,8 +88,6 @@ export async function POST(req: NextRequest) {
 
     // Parse the request body
     const { user, products, totalAmount, shippingAddress } = await req.json();
-
-
 
     // Validate required fields
     if (!user || !Array.isArray(products) || products.length === 0 || !totalAmount || !shippingAddress) {
@@ -120,8 +114,15 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        console.log(p, "djdj");
+        
+
         // Find product in DB
         const product = await ProductModel.findById(p.productId).session(session);
+
+
+        // console.log(product, "uuuuu");
+        
 
      
 

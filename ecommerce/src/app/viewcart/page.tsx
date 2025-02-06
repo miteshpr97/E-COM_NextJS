@@ -56,6 +56,10 @@ const ViewCart: React.FC = () => {
       user: user?._id || null,
       shippingAddress: (document.getElementById('address') as HTMLInputElement)?.value,
     };
+
+
+    console.log(orderDetails);
+    
     try {
       const res = await axios.post('/api/orders/', orderDetails);
       if (res.status === 201) {

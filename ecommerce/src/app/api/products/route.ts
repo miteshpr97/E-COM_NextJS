@@ -40,18 +40,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
-
-
 export async function GET() {
-    try {
-        await connect();  
-        const products = await ProductModel.find();  
-        return NextResponse.json(products, { status: 200 }); 
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        return NextResponse.json(
-            { message: "Failed to fetch products", error: String(error) },
-            { status: 500 }
-        );  
-    }
+  try {
+    await connect();
+    const products = await ProductModel.find();
+    console.log(products);
+    
+    return NextResponse.json(products, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch products", error: String(error) },
+      { status: 500 }
+    );
+  }
 }
