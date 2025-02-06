@@ -8,20 +8,21 @@ import { removeFromCart, incrementQuantity, decrementQuantity, clearCart } from 
 import Navbar from "../components/Navbar";
 import { useUser } from "../../context/UserContext";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const ViewCart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter()
+  // const router = useRouter()
   const { user } = useUser();
   const { carts } = useSelector((state: RootState) => state.cart);
   const totalAmount = carts.reduce((total, item) => total + item.price * item.qnty, 0);
 
-
+  const [loading, setLoading] = useState(false);
 
   const isOutOfStock = carts.some(cart => cart.stock === 0);
-  
+
   const handleRemove = (_id: string) => {
     dispatch(removeFromCart(_id));
   };
@@ -38,9 +39,8 @@ const ViewCart: React.FC = () => {
     }
   };
 
-
-
   const orderPlace = async () => {
+    setLoading(true);
     if (carts.length === 0) {
       alert("Your cart is empty. Please add some items before checking out.");
       return;
@@ -57,16 +57,15 @@ const ViewCart: React.FC = () => {
       shippingAddress: (document.getElementById('address') as HTMLInputElement)?.value,
     };
 
-
-    console.log(orderDetails);
-    
     try {
       const res = await axios.post('/api/orders/', orderDetails);
-      if (res.status === 201) {
+      if (res.status === 200) {
         toast.success("order successful!");
+        const stripeCheckoutUrl = res.data.url;
         setTimeout(() => {
           dispatch(clearCart());
-          router.push('/orders');
+          setLoading(false);
+          window.location.href = stripeCheckoutUrl;
         }, 2000);
       } else {
         alert("Failed to place order. Please try again.");
@@ -201,7 +200,7 @@ const ViewCart: React.FC = () => {
                   <p>₹{(totalAmount + 5).toFixed(2)}</p> {/* Default ₹5 shipping */}
                 </div>
 
-                
+
 
                 <button
                   className={`w-full py-3 rounded-lg font-semibold ${isOutOfStock ? "bg-gray-400 cursor-not-allowed" : "bg-black text-white hover:bg-gray-800"
@@ -215,7 +214,8 @@ const ViewCart: React.FC = () => {
                   }}
                   disabled={isOutOfStock}
                 >
-                  Checkout
+
+                  {loading ? "Loading..." : "Checkout"}
                 </button>
 
 
